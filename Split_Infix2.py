@@ -1,69 +1,74 @@
-class boolean:
-    def __init__(self, Og):
-        self.Og = Og
-        self.Stack = ""
-        self.Operator = "+ & ! - /"
-        self.Storage = []
-        self.Operator_List = []
-        self.Operate = []
-        self.Operate_unique = []
-        self.Ouput_list = []
+### This code do Change Input string to Split infix
+### and in we find no active Parentheses and we will cut it
+
+### Maintenance 20/8/2020 Change name: Class , Def , variable
+
+class Split_Infix:
+    def __init__(self, og):
+        self.og = og
+        self.stack = ""
+        self.operator = "+ & ! - /"
+        self.storage = []               # Storage is cut check_last
+        self.operator_list = []
+        self.operate = []               # Store input string
+        self.operate_unique = []        # Store input string are not same
+        self.ouput_list = []            # output of This class
 
     def Split_tree(self):
-        Str = self.Og       # This is solution of input
+        Str = self.og       # This is solution of input
 
         for i, j in zip(Str, range(len(Str))):  # i is str of input, j is length of input
             if(i == "("):                  
-                self.Ouput_list.append(i)  #add ( in output
+                self.ouput_list.append(i)  #add ( in output
                 pass
 
-            elif(i in self.Operator or i == ")"): 
+            elif(i in self.operator or i == ")"): 
                 if(i != ")"):                       # if i check is ) add that in Output_list
-                    self.Operator_List.append(i)    # if i check is operator add that in Operator_List
+                    self.operator_list.append(i)    # if i check is operator add that in Operator_List
 
-                if(len(self.Stack) != 0):               # if Stack have str will add them in Output_list
-                    self.Operate.append(self.Stack)             
-                    self.Ouput_list.append(self.Stack)           
+                if(len(self.stack) != 0):               # if Stack have str will add them in Output_list
+                    self.operate.append(self.stack)             
+                    self.ouput_list.append(self.stack)           
 
-                    if( self.Stack not in self.Operate_unique):
-                        self.Operate_unique.append(self.Stack)   #Create another List then isn't same str for do Top of Turth table
+                    if( self.stack not in self.operate_unique):
+                        self.operate_unique.append(self.stack)   #Create another List then isn't same str for do Top of Turth table
 
-                self.Ouput_list.append(i)               # Other that will add them to Output_list
+                self.ouput_list.append(i)               # Other that will add them to Output_list
 
-                self.Stack = "" 
+                self.stack = "" 
             
             else:
-                self.Stack += i 
-                if( len(Str) == j+1 and len(self.Stack) != 0 ):
-                    self.Operate.append(self.Stack)
-                    self.Ouput_list.append(self.Stack)
+                self.stack += i                         # Combine Operate
+                if( len(Str) == j+1 and len(self.stack) != 0 ): # Check If it the last Operate
+                    self.operate.append(self.stack)
+                    self.ouput_list.append(self.stack)
 
-                    if( self.Stack not in self.Operate_unique):
-                        self.Operate_unique.append(self.Stack)
+                    if( self.stack not in self.operate_unique):
+                        self.operate_unique.append(self.stack)
 
-        return self.Ouput_list
+        return self.ouput_list
 
-    def check_last(self, test):
-        for i in range(len(test)):
+    def Check_last(self, test):                 # This def to subtract the outermost parenthesis of the equation
+        for i in range(len(test)):              
             if(test[i] == "("):
-                self.Storage.append([test[i], i])
+                self.storage.append([test[i], i])
 
             elif(test[i] == ")"):
-                position_ = self.Storage.pop()
+                position_ = self.storage.pop()
                 range_bracket = i - position_[1]
                 if(range_bracket == len(test)-1):
                     return test[1:-1]
 
         return test 
 
-    def get_operator(self):
-        return self.Operator_List
+    def Get_operator(self):
+        return self.operator_list
 
-    def get_operate(self):
-        return self.Operate
+    def Get_operate(self):
+        return self.operate
 
-    def get_original_list(self):
-        return self.Ouput_list
+    def Get_original_list(self):
+        return self.ouput_list
         
 #################################################################################################################################
 
@@ -73,7 +78,7 @@ if( __name__ == "__main__" ):
     test_input_strings = Input.split("\n")
 
     for test in test_input_strings:
-        Testing = boolean(test)
+        Testing = Split_Infix(test)
         print("Splite tree",test,"==>",Testing.Split_tree(),'\n')
-        print("Out of Parentheses",test,"==>",Testing.check_last(test),'\n')
+        print("Out of Parentheses",test,"==>",Testing.Check_last(test),'\n')
         print("="*100)

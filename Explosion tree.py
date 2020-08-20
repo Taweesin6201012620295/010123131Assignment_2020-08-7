@@ -1,54 +1,58 @@
+## Thank you https://www.youtube.com/watch?v=2Z6g3kNymd0&t=439s
+
+### Maintenance 20/8/2020 Change name: Class , Def , variable
+
 import  Split_Infix2
 
-class CreateTree:
+class Expression_Tree:
 
     def __init__(self):
         self.stack = []
         self.tree_list = [""]*31
         
     def Tree(self, left, right, root, test, q):
-        Stack_or = []           # Storage operator +
-        Stack_and = []          # Storage operator &
-        Run = True          
-        test = split_expression.check_last(test)
+        stack_or = []           # Storage operator +
+        stack_and = []          # Storage operator &
+        run = True          
+        test = split_expression.Check_last(test)
         for i in range(len(test)):
 
-            if( test[i] == "(" ):
-                Run = False
+            if( test[i] == "(" ):      # Use stack to store each value in parenthesis 
+                run = False
                 self.stack.append(i)
-            elif( test[i] == ")"):
-                self.stack.pop()
+            elif( test[i] == ")"):     
+                self.stack.pop()        # If in parenthesis has done will pop will stack
 
             if(len(self.stack) == 0):
-                Run = True
+                run = True
 
             if( (test[i] == "!") ):
-                if(Run == False):
+                if(run == False):
                     pass
-                elif(Run == True):
+                elif(run == True):
                     if( root != "!" ):
-                        Is_joke = split_expression.check_last(test[i+1:])
+                        Is_joke = split_expression.Check_last(test[i+1:])
                         root = test[i]
                         left = Is_joke
                         right = right
             
-            if(Run):
+            if(run):
                 # find top of root tree
                 if(test[i] == "+"):
                     max_position_of_or = i
-                    Stack_or.append(max_position_of_or)
+                    stack_or.append(max_position_of_or)
                 # find top of root tree
                 if(test[i] == "&"):
                     max_position_of_and = i
-                    Stack_and.append(max_position_of_and)
+                    stack_and.append(max_position_of_and)
                 # And is Least Significant bit
                 # Or is Most Significant bit
-                if(len(Stack_and) > 0):
+                if(len(stack_and) > 0):
                     root = test[max_position_of_and]
                     left = test[:max_position_of_and]
                     right = test[max_position_of_and+1:]
                     
-                if(len(Stack_or) > 0):
+                if(len(stack_or) > 0):
                     root = test[max_position_of_or]
                     left = test[:max_position_of_or]
                     right = test[max_position_of_or+1:]
@@ -59,6 +63,7 @@ class CreateTree:
         self.tree_list[q] = root
         self.tree_list[pl] = left
         self.tree_list[pr] = right
+
         # meter checking value recursive value 
         # Do it Step by Step
         print(f"""{index} == >test:{test}
@@ -66,8 +71,9 @@ class CreateTree:
         root: {root}
         right: {right}
         {"="*100}""")
+        
     #This Term to Postorder 
-        if(len(left) == 1):                # Postfix
+        if(len(left) == 1):                # Postfix  Left Right Root
             self.tree_list[pl] = left[0]
             if( len(right) > 1):
                 self.Tree("", "", "", right, pr)
@@ -83,13 +89,13 @@ class CreateTree:
         if( len(right) > 1 ):                # Postfix
             self.Tree("", "", "", right, pr) # Recursive
         else:
-            if(right == ""):
+            if(right == ""):                
                 self.tree_list[pr] = right
             else:
                 self.tree_list[pr] = right[0]
         
         return self.tree_list
-##################################################################33
+##################################################################
 
 if( __name__ == "__main__" ):
     Input_sting = open('Expression Tree.txt','r')
@@ -97,9 +103,8 @@ if( __name__ == "__main__" ):
     test_input_strings = Input.split("\n")
 
     for test,index in zip(test_input_strings, range (len(test_input_strings))):
-        split_expression = Split_Infix2.boolean(test)
-        Test = CreateTree()
-        #print(split_expression)
+        split_expression = Split_Infix2.Split_Infix(test)
+        Test = Expression_Tree()
         print("-"*200)
         result = Test.Tree('','','',split_expression.Split_tree(), 0)
         print(index," ==> ",result)
